@@ -31,7 +31,7 @@ export const Listing =({item}:ItemProps)=>{
                     <div className="price-container">
                         <div className="product-price">
                                 { item.currency_code in currencySymbols 
-                                    ? currencySymbols[item?.currency_code]
+                                    ? currencySymbols[item.currency_code]
                                     : 'CAD'
                                 } 
                                 { item?.price }
