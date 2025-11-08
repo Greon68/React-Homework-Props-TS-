@@ -1,73 +1,47 @@
-# React + TypeScript + Vite
+Необходимо вывести список предложений каталога Etsy.com, используя библиотеку React. После загрузки данных и отрисовки список должен выглядеть так: Список предложений
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Данные списка предложений
+Данные для списка доступны в формате JSON в файле data/etsy.json. Вы можете перенести их в ваш компонент App или перенести файл и импортировать его.
 
-Currently, two official plugins are available:
+Это массив объектов, каждый объект представляет одно предложение. У предложения доступно множество свойств, но в приложении необходимо использовать следующие:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+listing_id — уникальный идентификатор предложения, число;
+url — ссылка на предложение, строка;
+MainImage — информация об изображении, объект, нам необходимо использовать свойство url_570xN для получения адреса главной картинки, строка;
+title — название предложения, строка;
+currency_code — код валюты, строка;
+price — цена, строка;
+quantity — доступное количество, число.
+Описание компонента
+Для отображения списка создайте компонент Listing, который принимает следующие атрибуты:
 
-## React Compiler
+items — список предложений, массив объектов, по умолчанию пустой массив.
+Компонент должен создавать на основе списка предложений следующий HTML-код:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+<div class="product-card">
+    <img src="https://i.etsystatic.com/12514138/r/il/808707/1992784565/il_570xN.1992784565_a90g.jpg" alt="Butterfly Cotton Fabric" class="product-image">
+    <div class="product-info">
+        <h3 class="product-title">Multi Colour Butterfly Winceyette Brushed Cotton Fabric Material</h3>
+        <div class="price-container">
+            <div class="product-price">£5.99</div>
+            <span class="stock-badge stock-medium">15 left</span>
+        </div>
+    </div>
+</div>
+Если название предложения превышает 50 символов, то необходимо выводить только первые 50 символов, и добавлять символ … в конце.
 
-## Expanding the ESLint configuration
+При выводе стоимости предложения необходимо учитывать валюту. Если цена задана:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+в долларах США, код USD, то цену вывести в формате $50.00;
+в евро, код EUR, то цену вывести в формате €50.00;
+в фунтах, код GBP, то цену вывести в формате £50.00;
+в остальных случаях цену вывести в формате CAD 50.00, где CAD — код валюты.
+Вывести остаток, подсветив его в зависимости от количества, используя класс stock-*:
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+stock-low — если остаток меньше 10 включительно;
+stock-medium — если остаток меньше 20 включительно;
+stock-high — если остаток больше 20.
+Реализация
+Необходимо отобразить данные списка предложений, используя компонент Listing.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Стили и пример разметки вы можете найти в папке markup. Разметка дана для примера, вы можете реализовать её самостоятельно
