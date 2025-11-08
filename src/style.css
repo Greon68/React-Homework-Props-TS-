@@ -31,7 +31,7 @@ body {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     cursor: pointer;
     position: relative;
-    /* height: 288px; */
+
 }
 
 .product-card:hover {
